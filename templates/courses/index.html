@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load cache %}
+
+{% block content %}
+    {% cache 500 courses %}
+        <h1>Courses</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Code</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for c in courses %}
+                <tr>
+                    <td>{{ c.name }}</td>
+                    <td>{{ c.code }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endcache %}
+{% endblock %}

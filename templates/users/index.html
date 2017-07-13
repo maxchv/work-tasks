@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block content %}
+    <a href="{% url "users:create" %}" class="btn-add">+</a>
+    <form class="search" method="post" action="{% url "users:index" %}?paginate_by={{ paginator.per_page }}">
+        {% csrf_token %}
+        <button class="btn-search" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+        <input placeholder="Username" value="{{ request.POST.user }}" type="search" name="user" list="users"/>
+        <datalist id="users">
+            {% for u in course_users %}
+                <option>{{ u.name }}</option>
+            {% endfor %}
+        </datalist>
+    </form>
+    <select class="how-many">
+        {% for i in per_page %}
+            {% if i == paginator.per_page %}
+                <option selected>{{ i }}</option>
+            {% else %}
+                <option>{{ i }}</option>
+            {% endif %}
+        {% endfor %}
+
+    </select>
+    <h1>Users</h1>
+    <table>
+        <colgroup>
+            <col/>
+            <col/>
+            <col/>
+            <col/>
+        </colgroup>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>E-mail</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for u in course_users %}
+            <tr>
+                <td>{{ u.name }}</td>
+                <td>{{ u.email }}</td>
+                <td>
+                    <span class="{{ u.status|lower }}">{{ u.status|capfirst }}</span>
+                </td>
+                <td>
+                    <a href="{% url "users:edit" u.id %}" class="edit"><i class="fa fa-pencil"
+                                                                          aria-hidden="true"></i></a>
+                    <a href="{% url "users:delete" u.id %}" class="delete"><i class="fa fa-trash"
+                                                                              aria-hidden="true"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div>
+        {% if is_paginated %}
+            <ul class="paginator">
+                {% if page_obj.has_previous %}
+                    <li><a href="?page={{ page_obj.previous_page_number }}&paginate_by={{ paginator.per_page }}" class="prev"><i
+                            class="fa fa-angle-left fa-2x"></i></a></li>
+                {% else %}
+                    <li><a class="done"><i class="fa fa-angle-left fa-2x"></i></a></li>
+                {% endif %}
+                {% for i in paginator.page_range %}
+                    {% if page_obj.number == i %}
+                        <li><a href="" class="current">{{ i }}</a></li>
+                    {% else %}
+                        <li><a href="?page={{ i }}&paginate_by={{ paginator.per_page }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li><a href="?page={{ page_obj.next_page_number }}&paginate_by={{ paginator.per_page }}" class="next"><i
+                            class="fa fa-angle-right fa-2x"></i></a></li>
+                {% else %}
+                    <li><a class="done"><i class="fa fa-angle-right fa-2x"></i></a></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+{% endblock %}

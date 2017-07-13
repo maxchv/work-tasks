@@ -1,0 +1,5 @@
+Django==1.11.3
+PyMySQL==0.7.11
+python-memcached==1.58
+
+

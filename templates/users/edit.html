@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <a href="{% url "users:index" %}" class="btn-back"><i class="fa fa-angle-left"></i></a>
+
+    <h1>Change user</h1>
+
+    <form class="user update" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <div class="btn-add-course" href>+</div>
+        <div id="selected"></div>
+        <div class="clear"></div>
+        <button type="submit" class="save-user">Save</button>
+    </form>
+
+    {% if messages %}
+        <div class="msg">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+        <script>setTimeout(function () {
+            window.location = '{% url 'users:index'%}';
+        }, 3000);
+        $("select[name=courses]").remove();
+        </script>
+    {% endif %}
+{% endblock %}
